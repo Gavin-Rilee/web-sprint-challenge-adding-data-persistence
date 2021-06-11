@@ -3,28 +3,21 @@ const Resources = require('./model');
 
 const router = express.Router();
 
-router.get('/', (_, res, next) => {
+router.get('/', (req, res, next) => {
     Resources.getAll()
-        .then(resources => {
-            res.status(200).json(resources)
-        })
-        .catch(err => next(err))
-})
-
-router.get('/:id', (req, res, next) => {
-    Resources.getById(req.params.id)
         .then(resource => {
-            res.status(200).json(resource)
+            res.json(resource)
         })
-        .catch(err => next(err))
+        .catch(next)
 })
 
 router.post('/', (req, res, next) => {
-    Resources.createResource(req.body)
+   const createResource = req.body
+    Resources.insert(createResource)
         .then(newResource => {
             res.status(201).json(newResource)
         })
-        .catch(err => next(err))
+        .catch(next)
 })
 
 module.exports = router;

@@ -1,7 +1,7 @@
 const db = require("../../data/dbConfig");
 
 async function getAll() {
-  const project = await db("project as p");
+  const project = await db("projects");
   return project.map((bigArr) => {
     return {
       ...bigArr,
@@ -10,17 +10,17 @@ async function getAll() {
   });
 }
 
-async function getById(id) {
-  const newProject = await db("project as p").where("p.project_id", id).first();
+async function getById(project_id) {
+  const project = await db("projects").where({project_id}).first();
   return {
-    ...newProject,
-    project_completed: newProject.project_completed ? true : false,
+    ...project,
+    project_completed: project.project_completed ? true : false,
   };
 }
 
 async function createProject(project) {    
-    
-  const [project_id] = await db("project").insert(project);
+
+  const [project_id] = await db("projects").insert(project);
   return getById(project_id);
 }
 

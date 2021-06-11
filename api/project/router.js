@@ -8,7 +8,7 @@ router.get("/", (_,res, next) => {
         .then(project => {
             res.status(200).json(project)
         })
-        .catch(err => next(err))
+        .catch(next)
 }); 
 
 router.post('/', (req, res, next) => {
@@ -16,7 +16,7 @@ router.post('/', (req, res, next) => {
         .then(newProject => {
             res.status(201).json(newProject)
         })
-        .catch(err => next(err))
+        .catch(next)
 })
 
 module.exports = router;

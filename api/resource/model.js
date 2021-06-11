@@ -3,21 +3,21 @@ const db = require('../../data/dbConfig')
 
 
 function getAll() {
-    return db('resource')
+    return db('resources')
 }
 
-function getById(id) {
-    return db('resource')
+async function getById(id) {
+    const resource = await db('resources')
       .where('resource_id', id)
       .first();
+      return {...resource}
   }
 
-function addResource(resources) {
-    return db('resource')
+async function addResource(resources) {
+  const [id] = await db('resources')
     .insert(resources)
-    .then(id => {
-        return getById(id[0])
-    })
+        return getById(id)
+    
 }
 
 module.exports = {

@@ -1,36 +1,34 @@
 // build your `Task` model here
-const db = require('../../data/dbConfig')
+const db = require("../../data/dbConfig");
 
-
-function getAll() {
-    return db('task as t')
+async function getAll() {
+  const tasks = await db("tasks as t")
+    .leftJoin("projects as p", "t.project_id", "p.project_id")
     .select(
-        't.task_id', 
-        't.task_description', 
-        't.task_notes', 
-        't.task_completed', 
-        'p.project_name', 
-        'p.project_description'
-    )
-    .leftJoin('projects as p', 't.project_id', 'p.project_id')
+      "t.*",
+      "p.project_name",
+      "p.project_description"
+    );
+  return tasks.map((task) => {
+    return {
+      ...task,
+      task_completed: task.task_completed ? true : false,
+    };
+  });
 }
 
-function getById(id) {
-    return db('task')
-      .where('task_id', id)
-      .first();
-  }
+async function getById(id) {
+  const task = db("tasks").where(id).first();
+  return { ...task, task_completed: task.task_completed ? true : false };
+}
 
-function addTask(task) {
-    return db('task')
-    .insert(task)
-    .then(id => {
-        return getById(id[0])
-    })
+async function addTask(task) {
+  const [id] = await db("tasks").insert(task);
+  return getById(id);
 }
 
 module.exports = {
-    getAll,
-    getById,
-    addTask
-} 
+  getAll,
+  getById,
+  addTask,
+};
