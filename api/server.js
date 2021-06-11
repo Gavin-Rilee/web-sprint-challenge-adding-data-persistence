@@ -12,8 +12,11 @@ server.use('/api/resources', resourcesRouter)
 server.use('/api/projects', projectsRouter)
 server.use('/api/tasks', tasksRouter)
 
-server.get("/", (req, res) => {
-    res.status(200).json({ api: "up" })
-})
 
 module.exports = server; 
+
+
+
+
+
+
